@@ -1,7 +1,8 @@
-
 # Capstone — CrewAI + Langflow via MCP Gateway
 
 **Goal:** A CrewAI agent calls a Langflow tool through the MCP Gateway with guardrails, RBAC, and traces.
+
+---
 
 ## A) Setup & Prereqs
 
@@ -12,8 +13,16 @@ mcpgateway --host 0.0.0.0 --port 4444
 # Venv
 python3 -m venv .venv && source .venv/bin/activate
 pip install --upgrade pip
-pip install langflow crewai fastapi uvicorn requests
+pip install langflow crewai fastapi uvicorn requests pydantic
 ```
+
+**Verify gateway:**
+
+```bash
+curl -s http://localhost:4444/health | jq .
+```
+
+---
 
 ## B) Build the Langflow Tool
 
@@ -23,19 +32,26 @@ Run Langflow:
 langflow run --host 0.0.0.0 --port 7860
 ```
 
-Create a **Summarizer** flow with input `{ "text": "..." }` and output `{ "summary": "..." }`.
+Create a **Summarizer** flow:
 
-Test the flow (adjust `flow_id`):
+- **Input:** `{ "text": "..." }`
+- **Output:** `{ "summary": "..." }`  
+  (If your flow returns chat-style output, we’ll normalize it in the adapter.)
+
+**Test the flow (adjust `<flow_id>`):**
 
 ```bash
-curl -s -X POST http://localhost:7860/api/v1/run/<flow_id> \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"MCP Gateway centralizes tool governance..."}' | jq .
+curl -s -X POST http://localhost:7860/api/v1/run/<flow_id>   -H 'Content-Type: application/json'   -d '{"input_value":"MCP Gateway centralizes tool governance...","input_type":"chat","output_type":"chat"}' | jq .
 ```
+
+**Expected:** A nested JSON with the generated text inside `outputs[].outputs[].results.message.text`.
+
+---
 
 ## C) Expose as an MCP Tool Server (Adapter)
 
 ```python
+# langflow_adapter.py
 from fastapi import FastAPI, HTTPException
 import requests
 
@@ -51,42 +67,67 @@ def tools():
 @app.post("/call/lf.summarize")
 def call(payload: dict):
     try:
-        r = requests.post(LANGFLOW_URL, json=payload, timeout=60)
+        body = {
+          "input_value": payload.get("text", ""),
+          "input_type": "chat",
+          "output_type": "chat"
+        }
+        r = requests.post(LANGFLOW_URL, json=body, timeout=60)
         r.raise_for_status()
         data = r.json()
-        return {"summary": data.get("summary", ""),
-                "tokens": data.get("usage", {}).get("total_tokens", 0)}
+        # Extract nested message text from Langflow
+        summary = (
+          data.get("outputs", [{}])[0]
+              .get("outputs", [{}])[0]
+              .get("results", {})
+              .get("message", {})
+              .get("text", "")
+        )
+        return {
+          "summary": summary,
+          "tokens": (data.get("usage") or {}).get("total_tokens", 0)
+        }
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
 ```
 
-Run the adapter:
+**Run the adapter:**
 
 ```bash
-uvicorn src.mcpws.adapters.langflow_adapter:app --port 9100
+uvicorn langflow_adapter:app --port 9100
 ```
 
-Register with Gateway:
+**Register with Gateway:**
 
 ```bash
 export BASE_URL=http://localhost:4444
 export TOKEN=$MCPGATEWAY_BEARER_TOKEN
 
-curl -s -X POST -H "Authorization: Bearer $TOKEN" \
-  -H 'Content-Type: application/json' \
-  -d '{
+curl -s -X POST -H "Authorization: Bearer $TOKEN"   -H 'Content-Type: application/json'   -d '{
     "name": "langflow",
     "url": "http://localhost:9100",
     "description": "Langflow Summarizer",
     "enabled": true,
     "request_type": "STREAMABLEHTTP"
-  }' \
-  $BASE_URL/gateways | jq '.'
+  }'   $BASE_URL/gateways | jq '.'
 ```
+
+**Validate catalog:**
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" $BASE_URL/tools | jq '.[] | {name, gateway: .gatewaySlug}'
+```
+
+### ✅ Solution
+
+- `lf.summarize` visible in catalog; a test call returns a non-empty `"summary"`.
+
+---
 
 ## D) CrewAI Agent
 
 ```python
+# crew_agent_direct.py
 from crewai import Agent, Task, Crew
 import requests
 
@@ -99,15 +140,19 @@ def gateway_invoke(text: str):
     return resp.json()
 
 analyst = Agent(role="Analyst", goal="Summarize via gateway-managed tools", backstory="Policy-first")
-
 task = Task(description="Summarize: {text}", expected_output="A concise summary", agent=analyst)
-
 crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
     result = gateway_invoke("MCP Gateway centralizes governance for AI tools...")
     print("Summary:", result.get("summary"))
 ```
+
+### ✅ Solution
+
+- Running the script prints a concise summary string.
+
+---
 
 ## E) Guardrails (Rate Limit + Secrets)
 
@@ -141,6 +186,26 @@ plugins:
       min_findings_to_block: 1
 ```
 
+**Provoke rate-limit:**
+
+```bash
+for i in 1 2 3 4; do
+  curl -s -H "Authorization: Bearer $MCPGATEWAY_BEARER_TOKEN"     -X POST $BASE_URL/call/lf.summarize     -H 'Content-Type: application/json'     -d '{"text":"spam me"}' | jq . || true
+done
+```
+
+**Provoke secrets detection:**
+
+```bash
+curl -s -H "Authorization: Bearer $MCPGATEWAY_BEARER_TOKEN"   -X POST $BASE_URL/call/lf.summarize   -H 'Content-Type: application/json'   -d '{"text":"sk-live-THIS-IS-FAKE-KEY"}' | jq .
+```
+
+### ✅ Solution
+
+- You observe **429** on burst; secrets detector blocks or redacts per config.
+
+---
+
 ## F) RBAC (+ Optional OBO)
 
 ```yaml
@@ -154,8 +219,40 @@ rbac:
       allow_tools: []
 ```
 
-**Test tokens:** create JWTs with `role` claim `analyst` vs `viewer`. Expect **200** vs **403**.
+**Create tokens:**
+
+```bash
+export ANALYST_TOKEN=$(python3 -m mcpgateway.utils.create_jwt_token   --username analyst@example.com --exp 10080 --secret my-test-key   --extra '{"role":"analyst"}')
+
+export VIEWER_TOKEN=$(python3 -m mcpgateway.utils.create_jwt_token   --username viewer@example.com --exp 10080 --secret my-test-key   --extra '{"role":"viewer"}')
+```
+
+**Test:**
+
+```bash
+curl -s -H "Authorization: Bearer $ANALYST_TOKEN"   -X POST $BASE_URL/call/lf.summarize   -H 'Content-Type: application/json'   -d '{"text":"ok"}' | jq .
+
+curl -s -H "Authorization: Bearer $VIEWER_TOKEN"   -X POST $BASE_URL/call/lf.summarize   -H 'Content-Type: application/json'   -d '{"text":"deny"}' | jq .
+```
+
+### ✅ Solution
+
+- Analyst call **200**; Viewer call **403**.
+
+---
 
 ## G) Observability
 
-Enable OTEL + Phoenix, then trigger a call and inspect trace + logs (correlation IDs, latency, policy decisions).
+Enable OTEL + Phoenix and send one request. Inspect **correlation IDs**, **latency**, and **policy decisions** in traces and logs.
+
+```bash
+docker run -p 6006:6006 -p 4317:4317 arizephoenix/phoenix:latest
+export OTEL_ENABLE_OBSERVABILITY=true
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+mcpgateway --host 0.0.0.0 --port 4444
+```
+
+### ✅ Solution
+
+- Phoenix shows a span for your tool call with timing; gateway logs show structured JSON with decisions.

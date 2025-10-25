@@ -20,7 +20,10 @@ description: Build governed, production-grade agentic AI with an MCP Gateway. Ha
 
 ## Welcome
 
-The **MCP Gateway Masterclass** is a hands-on workshop for building **enterprise-grade agentic AI**. You’ll deploy an **MCP Gateway**, register tools, enforce guardrails, and finish with a **CrewAI + Langflow** capstone running end-to-end.
+The **MCP Gateway Masterclass** is a hands-on workshop for building **enterprise-grade agentic AI**. You’ll bring up an **MCP Gateway**, register tools, add guardrails, and finish with a **CrewAI + Langflow** capstone running end-to-end.
+
+!!! tip "Format at a glance"
+    **2 days × (4h theory AM + 4h labs PM)**. All examples use **port 4444** for the gateway to build muscle memory.
 
 ---
 
@@ -58,30 +61,43 @@ The **MCP Gateway Masterclass** is a hands-on workshop for building **enterprise
 
     ^^^
 
-    2 days × (4h theory AM + 4h labs PM) — from quickstart to production patterns.
+    Two days from quickstart to production patterns, with checklists for each block.
     [:octicons-arrow-right-16: Open »](syllabus.md){ .md-button .md-button--primary }
 
-* :material-rocket-launch-outline: **Quickstart**
+* :material-book-open-variant-outline: **Part I — Foundations**
 
     ^^^
 
-    Bring the gateway up locally, health checks, tokens, and first tools.
-    [:octicons-arrow-right-16: Open »](quickstart.md){ .md-button .md-button--primary }
+    MCP, gateway architecture, serving patterns, security & observability.
+    [:octicons-arrow-right-16: Open »](part1-foundations.md){ .md-button .md-button--primary }
 
-* :material-flask-outline: **Labs (Day 1)**
-
-    ^^^
-
-    Register servers, use clients, wrappers, and rate-limit.
-    [:octicons-arrow-right-16: Open »](labs.md){ .md-button .md-button--primary }
-
-* :material-robot-outline: **Capstone (Day 2)**
+* :material-flask-outline: **Part II — Day-1 Labs (with solutions)**
 
     ^^^
 
-    CrewAI agent + Langflow tool via the Gateway with guardrails & RBAC.
-    [:octicons-arrow-right-16: Open »](capstone.md){ .md-button .md-button--primary }
+    Register servers, use clients, build wrappers, and enable rate-limits.
+    [:octicons-arrow-right-16: Open »](part2-labs.md){ .md-button .md-button--primary }
 
+* :material-thought-bubble-outline: **Part III — Capstone Theory**
+
+    ^^^
+
+    Design: Langflow ↔ Adapter ↔ Gateway ↔ CrewAI. Policies, RBAC, tracing.
+    [:octicons-arrow-right-16: Open »](part3-capstone-theory.md){ .md-button .md-button--primary }
+
+* :material-robot-outline: **Part IV — Capstone Build (with solutions)**
+
+    ^^^
+
+    Implement the adapter, run the CrewAI agent through the gateway, add guardrails & RBAC, capture traces.
+    [:octicons-arrow-right-16: Open »](part4-capstone-build.md){ .md-button .md-button--primary }
+
+* :material-library-outline: **Appendices**
+
+    ^^^
+
+    Docling + watsonx.ai RAG via the gateway, verified commands, API cheatsheets, troubleshooting, instructor RoS.
+    [:octicons-arrow-right-16: Open »](appendices/appendix-a-docling.md){ .md-button }
 </div>
 
 ---

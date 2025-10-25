@@ -1,4 +1,3 @@
-
 # Syllabus — MCP Gateway Masterclass (2 Days)
 
 **Format:** 2 days × (4h Theory AM + 4h Labs PM) = 16 hours  

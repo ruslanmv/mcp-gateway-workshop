@@ -1,35 +1,58 @@
-
 site_name: MCP Gateway Masterclass
 site_url: https://ruslanmv.github.io/mcp-gateway-workshop
 site_author: Ruslan Magaña
+site_description: Build governed, production-grade agentic AI with an MCP Gateway. Hands-on labs + capstone with CrewAI and Langflow.
 repo_name: mcp-gateway-workshop
 repo_url: https://github.com/ruslanmv/mcp-gateway-workshop
 edit_uri: edit/main/docs
 
 nav:
-  - Welcome: index.md
-  - Workshop:
-    - Syllabus: syllabus.md
-    - Quickstart: quickstart.md
-    - Labs (Day 1): labs.md
-    - Capstone (Day 2): capstone.md
-    - Troubleshooting: troubleshooting.md
-  - References:
-    - CrewAI Map: ref/crewai_map.md
-    - Langflow Map: ref/langflow_map.md
-    - Plugins & Guardrails: ref/plugins.md
-    - RBAC & Auth: ref/rbac.md
-    - Observability: ref/observability.md
+  - Home: index.md
+  - Preface: preface.md
+  - Syllabus: syllabus.md
+  - Part I — Foundations: part1-foundations.md
+  - Part II — Day-1 Labs: part2-labs.md
+  - Part III — Capstone Theory: part3-capstone-theory.md
+  - Part IV — Capstone Build: part4-capstone-build.md
+  - Appendices:
+      - Appendix A — Docling + watsonx.ai RAG via MCP Gateway: appendices/appendix-a-docling.md
+      - Appendix B — Verified Commands & Config: appendices/appendix-b-verified-commands.md
+      - Appendix C — API Usage Cheatsheet: appendices/appendix-c-api-cheatsheet.md
+      - Appendix D — Troubleshooting & FAQ: appendices/appendix-d-troubleshooting.md
+      - Appendix E — Screenshot Checklist: appendices/appendix-e-screenshot-checklist.md
+      - Appendix F — Instructor Run-of-Show: appendices/appendix-f-instructor-ros.md
+      - Appendix G — Kindle Production Tips: appendices/appendix-g-kindle-tips.md
 
 theme:
   name: material
   custom_dir: docs/.overrides
   features:
-    - navigation.tabs
-    - navigation.footer
-    - navigation.instant
+    # Navigation & orientation
+    - navigation.sections
+    - navigation.path        # breadcrumbs
+    - navigation.top         # back-to-top FAB
+    - navigation.footer      # ← Previous | Next →
+    - navigation.tracking    # sync sidebar with scroll
+    # Content polish
     - content.code.copy
+    - content.code.annotate
     - content.tabs.link
+    - header.autohide        # sleek scrolling experience
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
 
 extra:
   hero_wallpaper: assets/images/mcp-wallpaper.jpg
@@ -39,12 +62,13 @@ extra:
 
 extra_css:
   - assets/css/wx-hero.css
+
 extra_javascript:
   - assets/js/wx-hero.js
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
 plugins:
-  - search
+  - search    # keep defaults for max compatibility in strict mode
   - social
 
 markdown_extensions:
