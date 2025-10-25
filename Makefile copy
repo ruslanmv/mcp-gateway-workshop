@@ -168,8 +168,12 @@ lint:
 	@uv run --with ruff --with black --with mypy -- black --check src tests
 	@uv run --with ruff --with black --with mypy -- mypy src
 
+format:
+	@uv run --with ruff --with black -- ruff check --fix src tests
+	@uv run --with ruff --with black -- black src tests
+
 test:
-	@uv run --with pytest --with pytest-cov -- pytest -q --disable-warnings --maxfail=1 --cov=src --cov-report=term-missing
+	@uv run --with pytest -- pytest -q --disable-warnings --maxfail=1 --cov=src --cov-report=term-missing
 
 # =============================================================================
 #  Docs (mkdocs via uv)
@@ -211,29 +215,29 @@ book: book-epub book-pdf book-zip
 book-epub:
 	@test -f "$(MANUSCRIPT)" || { $(ERR) "Missing $(MANUSCRIPT)"; exit 1; }
 	@uv run \
-	  --with ebooklib \
-	  --with markdown \
-	  --with pillow \
-	  -- python scripts/build_book.py \
-	  --input "$(MANUSCRIPT)" \
-	  --epub "$(EPUB_OUT)" \
-	  --cover "$(COVER_IMG)" \
-	  --images-dir "$(IMAGES_DIR)"
+		--with ebooklib \
+		--with markdown \
+		--with pillow \
+		-- python scripts/build_book.py \
+		--input "$(MANUSCRIPT)" \
+		--epub "$(EPUB_OUT)" \
+		--cover "$(COVER_IMG)" \
+		--images-dir "$(IMAGES_DIR)"
 	@$(OK) "✅ EPUB: $(EPUB_OUT)"
 
 ## Build PDF only (WeasyPrint if available; fallback to ReportLab)
 book-pdf:
 	@test -f "$(MANUSCRIPT)" || { $(ERR) "Missing $(MANUSCRIPT)"; exit 1; }
 	@uv run \
-	  --with markdown \
-	  --with weasyprint \
-	  --with reportlab \
-	  --with pillow \
-	  -- python scripts/build_book.py \
-	  --input "$(MANUSCRIPT)" \
-	  --pdf "$(PDF_OUT)" \
-	  --cover "$(COVER_IMG)" \
-	  --images-dir "$(IMAGES_DIR)"
+		--with markdown \
+		--with weasyprint \
+		--with reportlab \
+		--with pillow \
+		-- python scripts/build_book.py \
+		--input "$(MANUSCRIPT)" \
+		--pdf "$(PDF_OUT)" \
+		--cover "$(COVER_IMG)" \
+		--images-dir "$(IMAGES_DIR)"
 	@$(OK) "✅ PDF: $(PDF_OUT)"
 
 ## Zip the entire /book folder for upload/release (portable, no heredoc)

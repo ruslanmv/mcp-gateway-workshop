@@ -5,6 +5,7 @@ from ..utils.logging import get_logger
 
 LOG = get_logger("crew-agent")
 
+
 # We make CrewAI optional for environments without it;
 # the gateway call remains the core demo.
 def main(text: Optional[str] = None) -> None:
@@ -17,6 +18,7 @@ def main(text: Optional[str] = None) -> None:
     result = gw.invoke("lf.summarize", {"text": text})
     print("SUMMARY:", result.get("summary"))
     print("TOKENS:", result.get("tokens"))
+
 
 if __name__ == "__main__":
     main()

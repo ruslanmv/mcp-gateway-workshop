@@ -1,17 +1,31 @@
 from crewai import Agent, Task, Crew
-import requests, os
+import os
+import requests
 
-GATEWAY=os.getenv("GATEWAY_URL","http://localhost:4444")
-TOKEN=os.getenv("GATEWAY_TOKEN","")
-headers={"Content-Type":"application/json", **({"Authorization":f"Bearer {TOKEN}"} if TOKEN else {})}
+GATEWAY = os.getenv("GATEWAY_URL", "http://localhost:4444")
+TOOL = "lf.summarize"
 
-def summarize(text:str)->str:
-  r=requests.post(f"{GATEWAY}/call/lf.summarize",json={"text":text},headers=headers,timeout=60)
-  r.raise_for_status()
-  return r.json().get("summary","")
 
-agent=Agent(role="Analyst", goal="Use the Gateway only.")
-task=Task(description="Summarize: {text}", expected_output="<=120 words", agent=agent)
+def gateway_invoke(text: str):
+    resp = requests.post(f"{GATEWAY}/call/{TOOL}", json={"text": text}, timeout=60)
+    resp.raise_for_status()
+    return resp.json()
+
+
+analyst = Agent(
+    role="Analyst",
+    goal="Summarize via gateway-managed tools",
+    backstory="Policy-first",
+)
+
+task = Task(
+    description="Summarize: {text}",
+    expected_output="A concise summary",
+    agent=analyst,
+)
+
+crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
-  print(Crew(agents=[agent], tasks=[task]).kickoff(inputs={"text": summarize("MCP Gateway centralizes governance across agents.")}))
+    result = gateway_invoke("MCP Gateway centralizes governance for AI tools...")
+    print("Summary:", result.get("summary"))

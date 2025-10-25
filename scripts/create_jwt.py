@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-import argparse, datetime as dt, jwt, os, json
+import argparse
+import datetime as dt
+import os
+
+import jwt
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sub", required=True, help="subject/email")
     ap.add_argument("--role", default="analyst", help="role claim")
-    ap.add_argument("--secret", default=os.environ.get("JWT_SECRET","dev-secret"))
+    ap.add_argument("--secret", default=os.environ.get("JWT_SECRET", "dev-secret"))
     ap.add_argument("--exp", type=int, default=60, help="minutes")
     args = ap.parse_args()
 
@@ -18,6 +23,7 @@ def main():
     }
     token = jwt.encode(payload, args.secret, algorithm="HS256")
     print(token)
+
 
 if __name__ == "__main__":
     main()

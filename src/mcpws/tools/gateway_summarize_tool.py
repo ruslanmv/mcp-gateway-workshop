@@ -2,6 +2,7 @@ from typing import Optional
 from crewai.tools import BaseTool
 from ..utils.gateway_client import GatewayClient
 
+
 class GatewaySummarizeTool(BaseTool):
     name: str = "GatewaySummarize"
     description: str = "Summarize text via MCP Gateway tool lf.summarize"

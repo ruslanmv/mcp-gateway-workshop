@@ -17,7 +17,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import os
 import re
 import sys
 from pathlib import Path
@@ -25,7 +24,7 @@ from pathlib import Path
 # Optional deps handled by uv --with
 try:
     import markdown as md
-except Exception as e:
+except Exception:
     print("ERROR: Python package 'markdown' is required.", file=sys.stderr)
     raise
 

@@ -1,8 +1,16 @@
-import logging, json, time, os, sys, uuid
-from typing import Any, Dict
+from __future__ import annotations
+
+import json
+import logging
+import os
+import sys
+import time
+import uuid
+from typing import Dict
+
 
 def _json_formatter(record: logging.LogRecord) -> str:
-    base = {
+    base: Dict[str, object] = {
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(record.created)),
         "level": record.levelname,
         "name": record.name,
@@ -11,12 +19,14 @@ def _json_formatter(record: logging.LogRecord) -> str:
     if record.exc_info:
         base["exc_info"] = True
     if hasattr(record, "extra") and isinstance(record.extra, dict):
-        base.update(record.extra)  # type: ignore
+        base.update(record.extra)  # type: ignore[arg-type]
     return json.dumps(base, ensure_ascii=False)
+
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:  # type: ignore[override]
         return _json_formatter(record)
+
 
 def get_logger(name: str = "app") -> logging.Logger:
     logger = logging.getLogger(name)
@@ -29,6 +39,7 @@ def get_logger(name: str = "app") -> logging.Logger:
     logger.addHandler(handler)
     logger.propagate = False
     return logger
+
 
 def correlation_id() -> str:
     return uuid.uuid4().hex
