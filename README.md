@@ -4,7 +4,7 @@
   <a href="https://www.python.org" target="_blank"><img src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11+" /></a>
   <a href="https://fastapi.tiangolo.com" target="_blank"><img src="https://img.shields.io/badge/fastapi-%F0%9F%9A%80-009688?logo=fastapi&logoColor=white" alt="FastAPI" /></a>
   <a href="https://www.docker.com" target="_blank"><img src="https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white" alt="Docker Ready" /></a>
-  <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank"><img src="https://img.shields.io/badge/docs-MkDocs%20Material-000000?logo=markdown" alt="MkDocs Material" /></a>
+  <a href="https://ruslanmv.com/mcp-gateway-workshop/" target="_blank"><img src="https://img.shields.io/badge/docs-MkDocs%20Material-000000?logo=markdown" alt="MkDocs Material" /></a>
   <a href="LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-Apache--2.0-green" alt="License" /></a>
 </p>
 
@@ -453,6 +453,5 @@ Released under **Apache-2.0**. See [LICENSE](LICENSE).
 Created by **Ruslan Magaña**.
 If this helped you ship safer, more governable agentic AI, share it with your team 💙
 
-With gratitude to the **IBM** community and teams who make this work possible.
-Special thanks to **Mihai Criveti** and **Peter Staar** for leadership around **Docling**.
+With gratitude to the **IBM** community and teams who make this work possible. Special thanks to **Mihai Criveti** for the support in MCP Gateway and **Peter Staar** for leadership around **Docling**.
 
