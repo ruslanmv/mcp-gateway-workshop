@@ -1,0 +1,15 @@
+site_name: MCP Gateway Workshop
+nav:
+  - Home: docs/index.md
+  - Syllabus: docs/syllabus.md
+  - Labs: docs/labs.md
+  - Capstone: docs/capstone.md
+  - Troubleshooting: docs/troubleshooting.md
+  - Reference:
+    - CrewAI Map: docs/ref/crewai_map.md
+    - Langflow Map: docs/ref/langflow_map.md
+    - Plugins: docs/ref/plugins.md
+    - RBAC: docs/ref/rbac.md
+    - Observability: docs/ref/observability.md
+theme:
+  name: material

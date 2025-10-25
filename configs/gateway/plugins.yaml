@@ -1,0 +1,27 @@
+plugins:
+  - name: rate_limiter
+    kind: plugins.rate_limiter.rate_limiter.RateLimiterPlugin
+    hooks: ["prompt_pre_fetch", "tool_pre_invoke"]
+    mode: enforce
+    priority: 50
+    config:
+      by_user: "3/10s"
+      by_tool: "3/10s"
+      burst: 1
+
+  - name: SecretsDetection
+    kind: plugins.secrets_detection.secrets_detection.SecretsDetectionPlugin
+    hooks: ["prompt_pre_fetch", "tool_post_invoke", "resource_post_fetch"]
+    mode: enforce
+    priority: 45
+    config:
+      detectors:
+        patterns:
+          openai_key: true
+          slack_token: true
+          private_key_block: true
+          jwt_like: true
+      redact: true
+      redaction_text: "***REDACTED***"
+      block_on_detection: true
+      min_findings_to_block: 1

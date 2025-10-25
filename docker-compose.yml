@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  gateway:
+    image: ghcr.io/context-forge/mcpgateway:latest
+    container_name: mcp-gateway
+    ports:
+      - "4444:4444"
+    env_file:
+      - ./configs/gateway/well-known.env
+      - ./configs/observability/otel.env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4444
+    restart: unless-stopped
+
+  langflow:
+    image: langflowai/langflow:latest
+    container_name: langflow
+    ports:
+      - "7860:7860"
+    command: ["langflow", "run", "--host", "0.0.0.0", "--port", "7860"]
+    restart: unless-stopped
+
+  adapter:
+    build:
+      context: .
+      dockerfile: docker/adapter/Dockerfile
+    container_name: langflow-adapter
+    env_file:
+      - ./configs/adapters/langflow_adapter.env
+    environment:
+      - LOG_LEVEL=INFO
+    ports:
+      - "9100:9100"
+    depends_on:
+      - langflow
+    restart: unless-stopped
+
+  agent:
+    build:
+      context: .
+      dockerfile: docker/agent/Dockerfile
+    container_name: crew-agent
+    environment:
+      - GATEWAY_URL=http://gateway:4444
+    depends_on:
+      - gateway
+      - adapter
+    command: ["python", "-m", "src.mcpws.agents.crew_agent"]
+    restart: "no"
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: phoenix
+    ports:
+      - "6006:6006"
+      - "4317:4317"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: mcp-net

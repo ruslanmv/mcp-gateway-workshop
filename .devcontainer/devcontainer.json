@@ -1,0 +1,10 @@
+{
+  "name": "MCP Workshop",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "charliermarsh.ruff", "ms-python.mypy-type-checker"]
+    }
+  },
+  "postCreateCommand": "pip install -r requirements.txt && pre-commit install"
+}
