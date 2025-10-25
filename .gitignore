@@ -12,3 +12,9 @@ htmlcov/
 .mypy_cache/
 .pytest_cache/
 *.log
+/.cache
+/book/backup
+/site
+uv.lock
+*.zip
+/src/mcpws.egg-info
