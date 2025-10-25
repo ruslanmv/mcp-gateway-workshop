@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+
+{% set hero_path = config.extra.hero_wallpaper or 'assets/images/mcp-wallpaper.jpg' %}
+{% set hero_url  = hero_path | url %}
+
+{% block extrahead %}
+  <link rel="preload" as="image" href="{{ hero_url }}">
+  <style>
+    .wx-hero { align-items: stretch; }
+    .wx-hero__inner.md-grid {
+      display: flex; flex-direction: column; justify-content: space-between;
+      align-items: flex-start; height: 100%; width: 100%; position: absolute;
+      top: 0; left: 0; padding: clamp(2.5rem, 5vw, 4rem);
+      box-sizing: border-box;
+    }
+    .wx-hero__bottom-content { max-width: 60ch; }
+  </style>
+{% endblock %}
+
+{% block tabs %}
+  {{ super() }}
+  <section class="wx-hero" style="--wx-hero-img: url('{{ hero_url }}');">
+    <div class="wx-hero__bg" aria-hidden="true"></div>
+    <canvas id="wx-bubbles" class="wx-hero__canvas" aria-hidden="true"></canvas>
+    <div class="wx-hero__inner md-grid">
+      <div class="md-typeset">
+        <h1 class="wx-hero__title">MCP Gateway Masterclass</h1>
+      </div>
+      <div class="md-typeset wx-hero__bottom-content">
+        <p class="wx-hero__tag">Build governed, production-grade agentic AI</p>
+        <p>Hands-on labs culminating in a capstone where a CrewAI agent securely calls a Langflow tool via the MCP Gateway.</p>
+        <div class="wx-cta">
+          <a href="{{ 'quickstart/' | url }}" class="md-button md-button--primary">Start Quickstart</a>
+          <a href="{{ 'syllabus/' | url }}" class="md-button">See Syllabus</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+{% endblock %}

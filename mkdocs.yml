@@ -1,15 +1,79 @@
-site_name: MCP Gateway Workshop
+
+site_name: MCP Gateway Masterclass
+site_url: https://ruslanmv.github.io/mcp-gateway-workshop
+site_author: Ruslan Magaña
+repo_name: mcp-gateway-workshop
+repo_url: https://github.com/ruslanmv/mcp-gateway-workshop
+edit_uri: edit/main/docs
+
 nav:
-  - Home: docs/index.md
-  - Syllabus: docs/syllabus.md
-  - Labs: docs/labs.md
-  - Capstone: docs/capstone.md
-  - Troubleshooting: docs/troubleshooting.md
-  - Reference:
-    - CrewAI Map: docs/ref/crewai_map.md
-    - Langflow Map: docs/ref/langflow_map.md
-    - Plugins: docs/ref/plugins.md
-    - RBAC: docs/ref/rbac.md
-    - Observability: docs/ref/observability.md
+  - Welcome: index.md
+  - Workshop:
+    - Syllabus: syllabus.md
+    - Quickstart: quickstart.md
+    - Labs (Day 1): labs.md
+    - Capstone (Day 2): capstone.md
+    - Troubleshooting: troubleshooting.md
+  - References:
+    - CrewAI Map: ref/crewai_map.md
+    - Langflow Map: ref/langflow_map.md
+    - Plugins & Guardrails: ref/plugins.md
+    - RBAC & Auth: ref/rbac.md
+    - Observability: ref/observability.md
+
 theme:
   name: material
+  custom_dir: docs/.overrides
+  features:
+    - navigation.tabs
+    - navigation.footer
+    - navigation.instant
+    - content.code.copy
+    - content.tabs.link
+
+extra:
+  hero_wallpaper: assets/images/mcp-wallpaper.jpg
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ruslanmv/mcp-gateway-workshop
+
+extra_css:
+  - assets/css/wx-hero.css
+extra_javascript:
+  - assets/js/wx-hero.js
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+plugins:
+  - search
+  - social
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde

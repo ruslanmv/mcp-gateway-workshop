@@ -1,35 +1,41 @@
+
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mcp-gateway-workshop"
+name = "mcpws"
 version = "0.1.0"
-description = "Workshop code for MCP Gateway Masterclass (Langflow + CrewAI capstone)"
-authors = [{ name="Workshop Authors"}]
+description = "MCP Gateway Workshop utilities (adapter, agent, CLI)"
+authors = [{ name="Ruslan Magaña"}]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-  "fastapi==0.115.4",
-  "uvicorn[standard]==0.31.1",
-  "requests==2.32.3",
-  "pydantic==2.9.2",
-  "python-dotenv==1.0.1",
-  "PyJWT==2.9.0",
-  "crewai==0.51.1",
-  "click==8.1.7"
+    "fastapi",
+    "uvicorn[standard]",
+    "requests",
+    "pydantic>=2",
+    "python-dotenv",
+    "crewai",
 ]
 
-[project.optional-dependencies]
-dev = ["pytest==8.3.3", "pytest-cov==5.0.0", "ruff==0.6.9", "black==24.8.0", "mypy==1.11.2", "types-requests==2.32.0.20241016"]
+[project.urls]
+Homepage = "https://github.com/ruslanmv/mcp-gateway-workshop"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.mypy]
-python_version = "3.11"
-strict = false
-warn_unused_ignores = true
+[tool.black]
+line-length = 100
 
 [tool.ruff]
 line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true

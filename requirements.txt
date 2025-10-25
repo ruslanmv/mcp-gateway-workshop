@@ -1,14 +1,19 @@
-fastapi==0.115.4
-uvicorn[standard]==0.31.1
+
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
 requests==2.32.3
 pydantic==2.9.2
 python-dotenv==1.0.1
-PyJWT==2.9.0
 crewai==0.51.1
-click==8.1.7
+
+# docs & tooling
+mkdocs-material==9.5.39
+mkdocs==1.6.1
+
+# dev/test
 pytest==8.3.3
 pytest-cov==5.0.0
-ruff==0.6.9
-black==24.8.0
+ruff==0.6.8
+black==24.10.0
 mypy==1.11.2
-types-requests==2.32.0.20241016
+types-requests==2.32.0.20240907
