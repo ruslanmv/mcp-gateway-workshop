@@ -38,6 +38,12 @@ endif
 VENV              ?= .venv
 REQUIRED_PYTHON   ?= 3.11
 
+# Helpful ports & URLs for local runs
+GATEWAY_URL       ?= http://localhost:4444
+ADAPTER_PORT      ?= 9100   # Langflow adapter
+HTTPBIN_PORT      ?= 9200   # httpbin wrapper server
+DOCLING_PORT      ?= 9300   # Docling RAG MCP server
+
 # Optional book build settings (safe to ignore if not used)
 BOOK_DIR          ?= book
 MANUSCRIPT        ?= $(BOOK_DIR)/manuscript.md
@@ -48,7 +54,9 @@ COVER_IMG         ?= $(BOOK_DIR)/kindle/cover/cover.jpg
 IMAGES_DIR        ?= $(BOOK_DIR)/images
 
 .PHONY: help install venv update lint format test docs-serve docs-build token \
-        up down seed clean check-uv maybe-bootstrap python-version \
+        up down seed seed-docling run-calculator run-httpbin run-adapter run-docling \
+        run-agent probe-langflow trace-probe chat-rag \
+        clean check-uv maybe-bootstrap python-version \
         book book-epub book-pdf book-zip
 
 # =============================================================================
@@ -68,7 +76,18 @@ help:
 	@$(OK) "  make token          - create demo JWT"
 	@$(OK) "  make up             - docker compose up -d"
 	@$(OK) "  make down           - docker compose down -v"
-	@$(OK) "  make seed           - register adapter with gateway"
+	@$(OK) "  make seed           - register Langflow adapter with gateway"
+	@$(OK) "  make seed-docling   - register Docling MCP server with gateway"
+	@$(OK) "  --- Runtimes ---"
+	@$(OK) "  make run-calculator - start Day-1 calc MCP server on :$(ADAPTER_PORT)"
+	@$(OK) "  make run-httpbin    - start Day-1 httpbin wrapper on :$(HTTPBIN_PORT)"
+	@$(OK) "  make run-adapter    - start Langflow adapter on :$(ADAPTER_PORT)"
+	@$(OK) "  make run-docling    - start Docling RAG MCP server on :$(DOCLING_PORT)"
+	@$(OK) "  make run-agent      - run CrewAI agent (Langflow tool via gateway)"
+	@$(OK) "  make probe-langflow - quick probe to a Langflow flow"
+	@$(OK) "  make trace-probe    - send traced request through gateway"
+	@$(OK) "  make chat-rag       - tiny chat client hitting docling.query via gateway"
+	@$(OK) "  ---"
 	@$(OK) "  make clean          - remove venv & caches"
 	@$(OK) "  make python-version - print detected Python version"
 	@$(OK) "  ---"
@@ -168,6 +187,10 @@ lint:
 	@uv run --with ruff --with black --with mypy -- black --check src tests
 	@uv run --with ruff --with black --with mypy -- mypy src
 
+format:
+	@uv run --with ruff --with black -- ruff check --fix src tests
+	@uv run --with ruff --with black -- black src tests
+
 test:
 	@uv run --with pytest --with pytest-cov -- pytest -q --disable-warnings --maxfail=1 --cov=src --cov-report=term-missing
 
@@ -178,10 +201,8 @@ test:
 docs-serve:
 	@uv run --with mkdocs --with "mkdocs-material[imaging]" -- mkdocs serve
 
-
 docs-build:
 	@uv run --with mkdocs --with "mkdocs-material[imaging]" -- mkdocs build --strict
-
 
 # =============================================================================
 #  Project scripts / docker
@@ -198,6 +219,45 @@ down:
 
 seed:
 	@uv run -- $(BASH) scripts/seed_gateway.sh
+
+# Register the Docling MCP server running at localhost:$(DOCLING_PORT)
+# Requires: TOKEN exported (JWT) and gateway reachable at $(GATEWAY_URL)
+seed-docling:
+	@test -n "$${TOKEN:-}" || { $(ERR) "TOKEN env var is required (JWT bearer)"; exit 1; }
+	@$(OK) "Registering 'docling' at http://localhost:$(DOCLING_PORT) ..."
+	@curl -s -X POST \
+	  -H "Authorization: Bearer $$TOKEN" \
+	  -H "Content-Type: application/json" \
+	  -d "{\"name\":\"docling\",\"url\":\"http://localhost:$(DOCLING_PORT)\",\"description\":\"Docling RAG Server\",\"enabled\":true,\"request_type\":\"STREAMABLEHTTP\"}" \
+	  $(GATEWAY_URL)/gateways | sed -e 's/{.*/{ ... }/'
+
+# =============================================================================
+#  Local run helpers (no Docker)
+# =============================================================================
+
+run-calculator:
+	@uv run -- uvicorn src.mcpws.servers.calculator_server:app --host 0.0.0.0 --port $(ADAPTER_PORT)
+
+run-httpbin:
+	@uv run -- uvicorn src.mcpws.servers.httpbin_wrapper:app --host 0.0.0.0 --port $(HTTPBIN_PORT)
+
+run-adapter:
+	@uv run -- uvicorn src.mcpws.adapters.langflow_adapter:app --host 0.0.0.0 --port $(ADAPTER_PORT)
+
+run-docling:
+	@uv run -- uvicorn src.mcpws.servers.docling_mcp_server:app --host 0.0.0.0 --port $(DOCLING_PORT)
+
+run-agent:
+	@uv run -- python -m src.mcpws.agents.crew_agent
+
+probe-langflow:
+	@uv run -- python -m src.mcpws.tools.probe_langflow "MCP Gateway centralizes governance."
+
+trace-probe:
+	@uv run -- python -m src.mcpws.tools.trace_probe "trace me"
+
+chat-rag:
+	@uv run -- python -m src.mcpws.tools.chat_rag_client "Summarize our SOW termination clause."
 
 # =============================================================================
 #  BOOK BUILDS (Kindle-ready EPUB + PDF + ZIP)

@@ -18,3 +18,4 @@ htmlcov/
 uv.lock
 *.zip
 /src/mcpws.egg-info
+/backup

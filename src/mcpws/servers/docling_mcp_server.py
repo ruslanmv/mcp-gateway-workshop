@@ -1,3 +1,4 @@
+# File: src/mcpws/servers/docling_mcp_server.py
 from __future__ import annotations
 
 import base64
@@ -9,8 +10,6 @@ import uuid
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Union, cast
 
 import chromadb
-
-# from chromadb.types import SparseVector  <-- REMOVED THIS LINE
 from chromadb.utils import embedding_functions
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from pydantic import BaseModel, Field
@@ -45,7 +44,6 @@ WATSONX_LLM_MODEL = os.getenv("WATSONX_LLM_MODEL", "meta-llama/llama-4-scout-17b
 # ---------- Docling ----------
 try:
     from docling.document_converter import DocumentConverter
-    from docling.datamodel.base_models import ConversionResult
 
     HAVE_DOCLING = True
 except Exception as e:  # pragma: no cover - best-effort import
@@ -146,7 +144,7 @@ def _generate_answer(prompt: str, *, max_new_tokens: int = 512, temperature: flo
 
             assert wx_client is not None
             params = TextGenerationParameters(  # type: ignore[call-arg]
-                decoding_method="greedy",
+                decoding_method=cast(Any, "greedy"),
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
             )
@@ -230,7 +228,8 @@ async def call_parse(
             raise ValueError(f"File exceeds {MAX_FILE_MB} MB limit")
 
         converter = DocumentConverter()
-        result: "ConversionResult" = converter.convert(io.BytesIO(content), file.filename)
+        # Use Any for the conversion result to keep mypy happy across docling versions
+        result: Any = converter.convert(cast(Any, io.BytesIO(content)), cast(Any, file.filename))
 
         text = result.document.export_to_markdown()
         images_b64: List[str] = []
@@ -276,7 +275,7 @@ async def call_ingest(
             if _file_too_large(content):
                 raise ValueError(f"{f.filename} exceeds {MAX_FILE_MB} MB limit")
 
-            result: "ConversionResult" = converter.convert(io.BytesIO(content), f.filename)
+            result: Any = converter.convert(cast(Any, io.BytesIO(content)), cast(Any, f.filename))
             md_text = result.document.export_to_markdown()
 
             for idx, chunk in enumerate(_chunk(md_text, CHUNK_SIZE, CHUNK_OVERLAP)):
@@ -305,7 +304,7 @@ async def call_ingest(
             documents=texts,
             embeddings=cast(List[Sequence[float]], vecs),
             ids=ids,
-            metadatas=cast(Any, metadatas),  # <-- CAST ADDED HERE
+            metadatas=cast(Any, metadatas),
         )
 
         payload = {
