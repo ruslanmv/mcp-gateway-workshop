@@ -1,7 +1,8 @@
 # Syllabus — MCP Gateway Masterclass (2 Days)
 
 **Format:** 2 days × (4h Theory AM + 4h Labs PM) = 16 hours  
-**Capstone:** CrewAI + Langflow via MCP Gateway (Day‑2)
+**Capstone:** CrewAI + Langflow via MCP Gateway (Day-2)
+
 
 ## Day 1 — Foundations (AM Theory)
 - Why an AI Gateway (pain points, ROI)
@@ -37,3 +38,7 @@
 - Lab F: RBAC (+ optional OBO)
 - Lab G: Observability trace
 - Team demos & rubric
+
+
+
+[⏱ View Schedule »](appendices/appendix-f-instructor-ros.md){ .md-button .md-button--primary }
