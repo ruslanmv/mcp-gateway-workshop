@@ -59,14 +59,17 @@ pre { background: #f6f8fa; padding: .8em; border-radius: .35em; overflow-x: auto
 img { max-width: 100%; height: auto; }
 """
 
+
 def read_text(p: Path) -> str:
     return p.read_text(encoding="utf-8")
+
 
 def md_to_html(markdown_text: str) -> str:
     return md.markdown(
         markdown_text,
-        extensions=["extra", "toc", "codehilite", "tables", "fenced_code"]
+        extensions=["extra", "toc", "codehilite", "tables", "fenced_code"],
     )
+
 
 def guess_title(markdown_text: str) -> str:
     # first ATX H1 line (# Title)
@@ -76,7 +79,10 @@ def guess_title(markdown_text: str) -> str:
             return m.group(1).strip()
     return "MCP Gateway Masterclass"
 
-def build_epub(html: str, out_path: Path, title: str, image_dir: Path|None, cover_img: Path|None):
+
+def build_epub(
+    html: str, out_path: Path, title: str, image_dir: Path | None, cover_img: Path | None
+):
     if epub is None:
         raise RuntimeError("ebooklib not available. Run with uv --with ebooklib.")
 
@@ -91,8 +97,12 @@ def build_epub(html: str, out_path: Path, title: str, image_dir: Path|None, cove
             book.set_cover("cover.jpg", f.read())
 
     # Stylesheet
-    style = epub.EpubItem(uid="style_css", file_name="style/style.css",
-                          media_type="text/css", content=CSS_DEFAULT.encode("utf-8"))
+    style = epub.EpubItem(
+        uid="style_css",
+        file_name="style/style.css",
+        media_type="text/css",
+        content=CSS_DEFAULT.encode("utf-8"),
+    )
     book.add_item(style)
 
     # Chapter from entire manuscript (simple, reliable)
@@ -116,7 +126,9 @@ def build_epub(html: str, out_path: Path, title: str, image_dir: Path|None, cove
             if not mt:
                 continue
             rel_name = f"images/{p.name}"
-            img_item = epub.EpubItem(uid=rel_name, file_name=rel_name, media_type=mt, content=p.read_bytes())
+            img_item = epub.EpubItem(
+                uid=rel_name, file_name=rel_name, media_type=mt, content=p.read_bytes()
+            )
             book.add_item(img_item)
 
     # TOC & Spine
@@ -127,10 +139,14 @@ def build_epub(html: str, out_path: Path, title: str, image_dir: Path|None, cove
 
     epub.write_epub(str(out_path), book)
 
+
 def build_pdf_weasy(html: str, out_path: Path, base_dir: Path):
     if HTML is None or CSS is None:
         raise RuntimeError("WeasyPrint not available.")
-    HTML(string=html, base_url=str(base_dir)).write_pdf(str(out_path), stylesheets=[CSS(string=CSS_DEFAULT)])
+    HTML(string=html, base_url=str(base_dir)).write_pdf(
+        str(out_path), stylesheets=[CSS(string=CSS_DEFAULT)]
+    )
+
 
 def build_pdf_reportlab(markdown_text: str, out_path: Path, title: str):
     """Plain fallback PDF—preserves text (no full HTML layout)."""
@@ -138,12 +154,12 @@ def build_pdf_reportlab(markdown_text: str, out_path: Path, title: str):
         raise RuntimeError("ReportLab not available.")
     c = canvas.Canvas(str(out_path), pagesize=LETTER)
     width, height = LETTER
-    x_margin, y_margin = 1.0*inch, 1.0*inch
+    x_margin, y_margin = 1.0 * inch, 1.0 * inch
     y = height - y_margin
     c.setTitle(title)
     c.setFont("Helvetica-Bold", 16)
     c.drawString(x_margin, y, title)
-    y -= 0.5*inch
+    y -= 0.5 * inch
     c.setFont("Helvetica", 10)
     for line in markdown_text.splitlines():
         line = line.replace("\t", "    ")
@@ -155,6 +171,7 @@ def build_pdf_reportlab(markdown_text: str, out_path: Path, title: str):
         y -= 12
     c.showPage()
     c.save()
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -195,6 +212,7 @@ def main():
             build_pdf_reportlab(md_text, out_pdf, title)
 
     print("OK")
+
 
 if __name__ == "__main__":
     main()
