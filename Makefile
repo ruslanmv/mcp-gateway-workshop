@@ -1,4 +1,4 @@
-# Makefile — MCP Gateway Workshop (uv-based, no pip)
+# Makefile — MCP Context Forge Workshop (uv-based, no pip)
 # Cross-platform: Windows (PowerShell/CMD/Git Bash) + macOS/Linux
 # - `make install`:
 #     * checks for Python ≥ REQUIRED_PYTHON
@@ -251,7 +251,7 @@ run-agent:
 	@uv run -- python -m src.mcpws.agents.crew_agent
 
 probe-langflow:
-	@uv run -- python -m src.mcpws.tools.probe_langflow "MCP Gateway centralizes governance."
+	@uv run -- python -m src.mcpws.tools.probe_langflow "MCP Context Forge centralizes governance."
 
 trace-probe:
 	@uv run -- python -m src.mcpws.tools.trace_probe "trace me"

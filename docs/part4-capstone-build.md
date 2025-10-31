@@ -1,6 +1,6 @@
 # Part IV — Capstone Build (Day‑2, PM Labs) — with Solutions
 
-> By the end you’ll have a Langflow tool powered by **IBM watsonx.ai** (or your chosen LLM), exposed through the **MCP Gateway**, driven by a **CrewAI agent**, and wrapped with guardrails, RBAC, and traces.
+> By the end you’ll have a Langflow tool powered by **IBM watsonx.ai** (or your chosen LLM), exposed through the **MCP Context Forge**, driven by a **CrewAI agent**, and wrapped with guardrails, RBAC, and traces.
 
 ## 6.1 Lab A — Setup & Prereqs (15m)
 
@@ -30,7 +30,7 @@ Create a Summarizer flow (Chat Input → Prompt → LLM → Chat Output). Progra
 import requests
 FLOW_ID="<flow-uuid>"
 url=f"http://127.0.0.1:7860/api/v1/run/{FLOW_ID}"
-payload={"input_value":"MCP Gateway centralizes governance.","input_type":"chat","output_type":"chat"}
+payload={"input_value":"MCP Context Forge centralizes governance.","input_type":"chat","output_type":"chat"}
 r=requests.post(url,json=payload,timeout=60); r.raise_for_status()
 j=r.json()
 msg=(j.get("outputs",[{}])[0].get("outputs",[{}])[0].get("results",{}).get("message",{}).get("text",""))
@@ -99,7 +99,7 @@ def summarize(text:str)->str:
   r=requests.post(f"{GATEWAY}/call/lf.summarize",json={"text":text},headers=headers,timeout=60); r.raise_for_status(); return r.json().get("summary","")
 agent=Agent(role="Analyst", goal="Use the Gateway only.")
 task=Task(description="Summarize: {text}", expected_output="<=120 words", agent=agent)
-print(Crew(agents=[agent], tasks=[task]).kickoff(inputs={"text": summarize("MCP Gateway centralizes governance across agents.")}))
+print(Crew(agents=[agent], tasks=[task]).kickoff(inputs={"text": summarize("MCP Context Forge centralizes governance across agents.")}))
 ```
 
 ### ✅ Solution

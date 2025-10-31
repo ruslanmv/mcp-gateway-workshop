@@ -77,7 +77,7 @@ def guess_title(markdown_text: str) -> str:
         m = re.match(r"^\s*#\s+(.+)$", line.strip())
         if m:
             return m.group(1).strip()
-    return "MCP Gateway Masterclass"
+    return "MCP Context Forge Masterclass"
 
 
 def build_epub(

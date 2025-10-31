@@ -1,6 +1,6 @@
-# Capstone — CrewAI + Langflow via MCP Gateway
+# Capstone — CrewAI + Langflow via MCP Context Forge
 
-**Goal:** A CrewAI agent calls a Langflow tool through the MCP Gateway with guardrails, RBAC, and traces.
+**Goal:** A CrewAI agent calls a Langflow tool through the MCP Context Forge with guardrails, RBAC, and traces.
 
 ---
 
@@ -41,7 +41,7 @@ Create a **Summarizer** flow:
 **Test the flow (adjust `<flow_id>`):**
 
 ```bash
-curl -s -X POST http://localhost:7860/api/v1/run/<flow_id>   -H 'Content-Type: application/json'   -d '{"input_value":"MCP Gateway centralizes tool governance...","input_type":"chat","output_type":"chat"}' | jq .
+curl -s -X POST http://localhost:7860/api/v1/run/<flow_id>   -H 'Content-Type: application/json'   -d '{"input_value":"MCP Context Forge centralizes tool governance...","input_type":"chat","output_type":"chat"}' | jq .
 ```
 
 **Expected:** A nested JSON with the generated text inside `outputs[].outputs[].results.message.text`.
@@ -144,7 +144,7 @@ task = Task(description="Summarize: {text}", expected_output="A concise summary"
 crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
-    result = gateway_invoke("MCP Gateway centralizes governance for AI tools...")
+    result = gateway_invoke("MCP Context Forge centralizes governance for AI tools...")
     print("Summary:", result.get("summary"))
 ```
 

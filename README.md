@@ -1,4 +1,4 @@
-# MCP Gateway Masterclass
+# MCP Context Forge Masterclass
 
 <p align="center">
   <a href="https://www.python.org" target="_blank"><img src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11+" /></a>
@@ -9,16 +9,16 @@
 </p>
 
 <div align="center">
-  <img src="docs/assets/images/mcp-wallpaper.jpg" alt="MCP Gateway" width="820"/>
+  <img src="docs/assets/images/mcp-wallpaper.jpg" alt="MCP Context Forge" width="820"/>
 </div>
 
 ---
 
 ## Overview
 
-The **MCP Gateway Masterclass** is a complete, from-zero-to-hero workshop for building **governed, production-grade agentic AI** with the **Model Context Protocol (MCP) Gateway**.
+The **MCP Context Forge Masterclass** is a complete, from-zero-to-hero workshop for building **governed, production-grade agentic AI** with the **Model Context Protocol (MCP) Gateway**.
 
-**What is the MCP Gateway?**  
+**What is the MCP Context Forge?**  
 It’s a policy and connectivity layer between **agents/clients** and **tools/data**. Instead of wiring each agent directly to dozens of APIs, you centralize:
 - **Tool registration & discovery** (MCP servers, REST adapters, wrappers)
 - **Guardrails** (RBAC, rate limits, secrets/PII filters, schema guards)
@@ -26,7 +26,7 @@ It’s a policy and connectivity layer between **agents/clients** and **tools/da
 - **Governance** (tenancy, on-behalf-of, audit readiness)
 
 By the end, you will:
-- Run the **MCP Gateway** locally (and optionally via Docker Compose)
+- Run the **MCP Context Forge** locally (and optionally via Docker Compose)
 - Register and **federate tools** from MCP servers and REST adapters
 - Enforce **guardrails** at the edge
 - Capture **observability** with **Phoenix**
@@ -40,7 +40,7 @@ By the end, you will:
 
 ## Table of Contents
 
-- [MCP Gateway Masterclass](#mcp-gateway-masterclass)
+- [MCP Context Forge Masterclass](#mcp-context-forge-masterclass)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
@@ -51,7 +51,7 @@ By the end, you will:
   - [Run the Workshop](#run-the-workshop)
     - [Day-1 Labs](#day-1-labs)
     - [Day-2 Capstone](#day-2-capstone)
-  - [Bonus: Docling + IBM watsonx.ai RAG via MCP Gateway](#bonus-docling--ibm-watsonxai-rag-via-mcp-gateway)
+  - [Bonus: Docling + IBM watsonx.ai RAG via MCP Context Forge](#bonus-docling--ibm-watsonxai-rag-via-mcp-context-forge)
     - [1) Install \& environment](#1-install--environment)
     - [2) Start the Docling MCP server](#2-start-the-docling-mcp-server)
     - [3) Register with the Gateway](#3-register-with-the-gateway)
@@ -202,7 +202,7 @@ uv run -- python -m src.mcpws.agents.crew_agent
 
 ---
 
-## Bonus: Docling + IBM watsonx.ai RAG via MCP Gateway
+## Bonus: Docling + IBM watsonx.ai RAG via MCP Context Forge
 
 This appendix turns real-world PDFs/images into a **multimodal RAG chatbot**—fully governed behind the Gateway.
 
@@ -453,5 +453,5 @@ Released under **Apache-2.0**. See [LICENSE](LICENSE).
 Created by **Ruslan Magaña**.
 If this helped you ship safer, more governable agentic AI, share it with your team 💙
 
-With gratitude to the **IBM** community and teams who make this work possible. Special thanks to **Mihai Criveti** for the support in MCP Gateway and **Peter Staar** for leadership around **Docling**.
+With gratitude to the **IBM** community and teams who make this work possible. Special thanks to **Mihai Criveti** for the support in MCP Context Forge and **Peter Staar** for leadership around **Docling**.
 

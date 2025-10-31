@@ -4,7 +4,7 @@
 
 **Model Context Protocol (MCP)** standardizes how agents communicate with *tool servers* that expose **tools**, **resources**, and **prompts**.
 
-**The MCP Gateway** sits in front of many MCP servers and REST sources to:
+**The MCP Context Forge** sits in front of many MCP servers and REST sources to:
 
 - **Federate tools** into a unified, discoverable catalog
 - **Enforce policy** with plugins (pre/post hooks), RBAC, and authentication
@@ -43,7 +43,7 @@ Agent ↔ Gateway ↔ MCP Servers / REST APIs
 **High‑level diagram**
 ```mermaid
 flowchart LR
-  A[CrewAI Agent] -->|MCP| B(MCP Gateway)
+  A[CrewAI Agent] -->|MCP| B(MCP Context Forge)
   B -->|RBAC / Guardrails| B
   B --> C[Server/Adapter 1]
   B --> D[Server/Adapter 2]
@@ -66,7 +66,7 @@ flowchart LR
 from crewai import Agent, Task, Crew
 analyst = Agent(role="Analyst", goal="Summarize inputs concisely", backstory="Operates under gateway policies")
 task = Task(description="Summarize: {text}", expected_output="2-3 sentences", agent=analyst)
-print(Crew(agents=[analyst], tasks=[task]).kickoff(inputs={"text":"MCP Gateway centralizes governance for tools."}))
+print(Crew(agents=[analyst], tasks=[task]).kickoff(inputs={"text":"MCP Context Forge centralizes governance for tools."}))
 ```
 
 ---

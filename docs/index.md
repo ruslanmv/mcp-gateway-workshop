@@ -1,7 +1,7 @@
 ---
 template: home.html
-title: MCP Gateway Masterclass
-description: Build governed, production-grade agentic AI with an MCP Gateway. Hands-on labs + capstone with CrewAI and Langflow.
+title: MCP Context Forge Masterclass
+description: Build governed, production-grade agentic AI with an MCP Context Forge. Hands-on labs + capstone with CrewAI and Langflow.
 ---
 
 <p align="center">
@@ -20,7 +20,7 @@ description: Build governed, production-grade agentic AI with an MCP Gateway. Ha
 
 ## Welcome
 
-The **MCP Gateway Masterclass** is a hands-on workshop for building **enterprise-grade agentic AI**. You’ll bring up an **MCP Gateway**, register tools, add guardrails, and finish with a **CrewAI + Langflow** capstone running end-to-end.
+The **MCP Context Forge Masterclass** is a hands-on workshop for building **enterprise-grade agentic AI**. You’ll bring up an **MCP Context Forge**, register tools, add guardrails, and finish with a **CrewAI + Langflow** capstone running end-to-end.
 
 !!! tip "Format at a glance"
     **2 days × (4h theory AM + 4h labs PM)**. All examples use **port 4444** for the gateway to build muscle memory.
@@ -106,7 +106,7 @@ The **MCP Gateway Masterclass** is a hands-on workshop for building **enterprise
 
 ```mermaid
 flowchart LR
-  A[CrewAI Agent] --> B(MCP Gateway)
+  A[CrewAI Agent] --> B(MCP Context Forge)
   B --> C[Adapter/Server]
   C --> D[Langflow API\n/run flow]
   B -->|Guardrails: rate-limit, PII/secrets, RBAC| B

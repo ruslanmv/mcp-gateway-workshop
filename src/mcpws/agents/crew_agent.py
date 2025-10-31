@@ -9,7 +9,7 @@ LOG = get_logger("crew-agent")
 # We make CrewAI optional for environments without it;
 # the gateway call remains the core demo.
 def main(text: Optional[str] = None) -> None:
-    text = text or "MCP Gateway centralizes tool governance for AI agents."
+    text = text or "MCP Context Forge centralizes tool governance for AI agents."
     gw = GatewayClient(base_url=os.environ.get("GATEWAY_URL", "http://localhost:4444"))
     LOG.info("list_tools")
     tools = gw.list_tools()

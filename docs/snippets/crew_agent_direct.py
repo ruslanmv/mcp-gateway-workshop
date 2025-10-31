@@ -27,5 +27,5 @@ task = Task(
 crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
-    result = gateway_invoke("MCP Gateway centralizes governance for AI tools...")
+    result = gateway_invoke("MCP Context Forge centralizes governance for AI tools...")
     print("Summary:", result.get("summary"))

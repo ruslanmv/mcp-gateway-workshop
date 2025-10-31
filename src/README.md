@@ -1,4 +1,4 @@
-# MCP Gateway Workshop — `src/` Guide (Hands-on, step-by-step)
+# MCP Context Forge Workshop — `src/` Guide (Hands-on, step-by-step)
 
 Welcome! This README is your **field guide** for everything under `src/` that you’ll run during the workshop. It maps each folder to a lab, shows the **exact commands** to execute, and explains how the pieces fit together for production-minded use.
 
@@ -193,7 +193,7 @@ Create a **Summarizer** flow in Langflow with a single text input and single tex
 Sanity check the endpoint shape (replace `<flow_id>`):
 
 ```bash
-uv run -- python -m src.mcpws.tools.probe_langflow "MCP Gateway centralizes governance."
+uv run -- python -m src.mcpws.tools.probe_langflow "MCP Context Forge centralizes governance."
 # Configure LANGFLOW_URL/LANGFLOW_FLOW_ID in the script env or your shell
 ```
 

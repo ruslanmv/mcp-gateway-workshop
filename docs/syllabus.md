@@ -1,7 +1,7 @@
-# Syllabus — MCP Gateway Masterclass (2 Days)
+# Syllabus — MCP Context Forge Masterclass (2 Days)
 
 **Format:** 2 days × (4h Theory AM + 4h Labs PM) = 16 hours  
-**Capstone:** CrewAI + Langflow via MCP Gateway (Day-2)
+**Capstone:** CrewAI + Langflow via MCP Context Forge (Day-2)
 
 
 ## Day 1 — Foundations (AM Theory)

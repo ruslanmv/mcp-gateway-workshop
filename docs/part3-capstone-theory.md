@@ -6,11 +6,11 @@ Goal: **CrewAI agent** uses a **Langflow** tool **through** the **Gateway**, wit
 ## 5.2 Architecture: Langflow + CrewAI + Gateway
 - **Langflow:** visual builder; flows as HTTP endpoints (`/api/v1/run/{flow_id}`)
 - **Adapter/Server:** bridges Langflow to an MCP tool
-- **MCP Gateway:** registers adapter; enforces policy; exposes catalog
+- **MCP Context Forge:** registers adapter; enforces policy; exposes catalog
 - **CrewAI Agent:** only calls the Gateway
 
 ```
-CrewAI Agent → MCP Gateway → Adapter/Server → Langflow API → Adapter → Gateway → Agent
+CrewAI Agent → MCP Context Forge → Adapter/Server → Langflow API → Adapter → Gateway → Agent
 ```
 
 ## 5.3 Setup & Prerequisites

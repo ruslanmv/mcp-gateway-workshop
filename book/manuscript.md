@@ -1,8 +1,8 @@
-# MCP Gateway Masterclass
+# MCP Context Forge Masterclass
 
 **From Zero to Hero with Agents, Tools, and Enterprise Guardrails**
 **Format:** 2 days × (4h Theory AM + 4h Labs PM) = **16 hours**
-**Capstone:** Day‑2 builds **CrewAI + Langflow via MCP Gateway** end‑to‑end
+**Capstone:** Day‑2 builds **CrewAI + Langflow via MCP Context Forge** end‑to‑end
 
 ---
 
@@ -69,17 +69,17 @@ Every section includes:
 
 ## Preface: Why an AI Gateway Now
 
-Agentic AI is exploding: multiple LLMs, tools, plug‑ins, and data sources. Without a **central control plane**, teams face key sprawl, inconsistent security, no audit trail, and repeated integrations. An **MCP Gateway** fixes this by becoming a **single entry point** where **agents discover and use tools**, while the platform team enforces:
+Agentic AI is exploding: multiple LLMs, tools, plug‑ins, and data sources. Without a **central control plane**, teams face key sprawl, inconsistent security, no audit trail, and repeated integrations. An **MCP Context Forge** fixes this by becoming a **single entry point** where **agents discover and use tools**, while the platform team enforces:
 
 * **Security:** RBAC, OAuth/JWT, optional mTLS.
 * **Governance:** PII/Secrets filters, schema guards, rate limits.
 * **Observability:** JSON logs and OpenTelemetry traces.
 
-This book is a guided path from **first run** to **production‑grade**—ending with a live capstone: a **CrewAI agent** securely calling a **Langflow** tool **through** the **MCP Gateway**, with guardrails and logs that prove it.
+This book is a guided path from **first run** to **production‑grade**—ending with a live capstone: a **CrewAI agent** securely calling a **Langflow** tool **through** the **MCP Context Forge**, with guardrails and logs that prove it.
 
 **What you’ll build and learn**
 
-* Stand up an MCP Gateway locally (and optionally with Docker Compose).
+* Stand up an MCP Context Forge locally (and optionally with Docker Compose).
 * Register servers and **federate tools** into a single catalog.
 * Wrap Langflow as a **gateway‑managed tool** via a tiny adapter.
 * Write a **CrewAI** agent that uses the gateway (not raw services).
@@ -121,7 +121,7 @@ Run the gateway locally and in a small cluster; federate tools; enforce security
 
 **Model Context Protocol (MCP)** standardizes how agents communicate with *tool servers* that expose **tools**, **resources**, and **prompts**. A tool is any callable capability: a database query, a web request, a business system action, or a Langflow flow.
 
-**The MCP Gateway** sits in front of many MCP servers and REST sources to:
+**The MCP Context Forge** sits in front of many MCP servers and REST sources to:
 
 * **Federate tools** into a unified, discoverable catalog.
 * **Enforce policy** with plugins (pre/post hooks), RBAC, and authentication.
@@ -181,7 +181,7 @@ JSON logs (correlation IDs, latency, policy decisions) and OpenTelemetry traces 
 
 ```mermaid
 flowchart LR
-  A[CrewAI Agent] -->|MCP| B(MCP Gateway)
+  A[CrewAI Agent] -->|MCP| B(MCP Context Forge)
   B -->|RBAC / Guardrails| B
   B --> C[Server/Adapter 1]
   B --> D[Server/Adapter 2]
@@ -222,7 +222,7 @@ summary_task = Task(
 )
 
 crew = Crew(agents=[analyst], tasks=[summary_task])
-result = crew.kickoff(inputs={"text": "MCP Gateway centralizes governance for tools."})
+result = crew.kickoff(inputs={"text": "MCP Context Forge centralizes governance for tools."})
 print(result)
 ```
 
@@ -397,7 +397,7 @@ Welcome to the afternoon session. The goal is simple and ambitious: get somethin
 
 Picture the gateway as a control tower. Before planes can land, the tower must boot cleanly and answer the radio. That’s what this lab does.
 
-Start in an empty terminal, preferably inside a fresh project folder. Create a virtual environment so today’s packages don’t spill into tomorrow’s projects. Then install the MCP Gateway and launch it on **4444**.
+Start in an empty terminal, preferably inside a fresh project folder. Create a virtual environment so today’s packages don’t spill into tomorrow’s projects. Then install the MCP Context Forge and launch it on **4444**.
 
 ```bash
 # 1) Create venv and install the gateway
@@ -660,7 +660,7 @@ You now have a gateway that runs, a server that advertises tools, a client that 
 
 # Part III — Capstone Theory (Day‑2, AM)
 
-The second morning is where our architecture stops pretending. By lunch you’ll have a working **CrewAI → Gateway → Adapter → Langflow** pipeline that returns real answers, and a plan to keep it safe. Think of today as taking everything from Day‑1 (policies, catalog, clients) and threading them through one compelling story: an agent that never touches raw services, only the **MCP Gateway**.
+The second morning is where our architecture stops pretending. By lunch you’ll have a working **CrewAI → Gateway → Adapter → Langflow** pipeline that returns real answers, and a plan to keep it safe. Think of today as taking everything from Day‑1 (policies, catalog, clients) and threading them through one compelling story: an agent that never touches raw services, only the **MCP Context Forge**.
 
 ---
 
@@ -683,7 +683,7 @@ If you can show those five screenshots, you’ve done real platform work.
 Langflow is a friendly canvas. The Gateway is an uncompromising chaperone. The adapter is the interpreter between the two.
 
 ```
-CrewAI Agent → MCP Gateway → Adapter/Server → Langflow API → Adapter → Gateway → Agent
+CrewAI Agent → MCP Context Forge → Adapter/Server → Langflow API → Adapter → Gateway → Agent
 ```
 
 The Gateway federates tools, authorizes calls, and enforces guardrails. The adapter translates our **Langflow run endpoint** into a **tool** with a crisp JSON schema. The agent only knows one host: the Gateway.
@@ -729,7 +729,7 @@ From the canvas, note your **`<flow_id>`**. Dry‑run the endpoint:
 ```bash
 curl -s -X POST http://localhost:7860/api/v1/run/<flow_id> \
   -H 'Content-Type: application/json' \
-  -d '{"text":"MCP Gateway centralizes tool governance..."}' | jq .
+  -d '{"text":"MCP Context Forge centralizes tool governance..."}' | jq .
 ```
 
 You should see a JSON with either a `summary` or an `output` field and, if enabled, a `usage.total_tokens` field. That’s the shape your adapter will normalize.
@@ -865,7 +865,7 @@ def gateway_invoke(text: str):
 analyst = Agent(
     role="Analyst",
     goal="Summarize texts using the gateway-managed tool",
-    backstory="Operates through the MCP Gateway only."
+    backstory="Operates through the MCP Context Forge only."
 )
 
 task = Task(
@@ -877,7 +877,7 @@ task = Task(
 crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
-    result = gateway_invoke("MCP Gateway centralizes governance for AI tools...")
+    result = gateway_invoke("MCP Context Forge centralizes governance for AI tools...")
     print("Summary:", result.get("summary"))
 ```
 
@@ -936,7 +936,7 @@ You’ll wire these in the afternoon; for now, the design is the important part.
 
 # Part IV — Capstone Build (Day‑2, PM Labs)
 
-> The afternoon is for shipping. By the end of these labs you’ll have a Langflow tool powered by **IBM watsonx.ai**, exposed through the **MCP Gateway**, driven by a **CrewAI agent**, and wrapped with guardrails, RBAC, and traces. Everything routes through the Gateway on **port 4444**.
+> The afternoon is for shipping. By the end of these labs you’ll have a Langflow tool powered by **IBM watsonx.ai**, exposed through the **MCP Context Forge**, driven by a **CrewAI agent**, and wrapped with guardrails, RBAC, and traces. Everything routes through the Gateway on **port 4444**.
 
 ---
 
@@ -1062,7 +1062,7 @@ FLOW_ID = "<your-flow-uuid>"
 url = f"http://127.0.0.1:7860/api/v1/run/{FLOW_ID}"
 
 payload = {
-    "input_value": "MCP Gateway centralizes tool governance across multiple agents.",
+    "input_value": "MCP Context Forge centralizes tool governance across multiple agents.",
     "input_type": "chat",
     "output_type": "chat"
 }
@@ -1219,7 +1219,7 @@ task = Task(
 crew = Crew(agents=[analyst], tasks=[task])
 
 if __name__ == "__main__":
-    print(crew.kickoff(inputs={"text": gateway_summarize("MCP Gateway centralizes tool governance across agents.")}))
+    print(crew.kickoff(inputs={"text": gateway_summarize("MCP Context Forge centralizes tool governance across agents.")}))
 ```
 
 ### B) CrewAI Tool subclass (production‑friendly)
@@ -1447,7 +1447,7 @@ capstone/
 
 # Appendices
 
-# Appendix A — Building a Multimodal RAG Chatbot with **Docling** + **IBM watsonx.ai** via the **MCP Gateway**
+# Appendix A — Building a Multimodal RAG Chatbot with **Docling** + **IBM watsonx.ai** via the **MCP Context Forge**
 
 *Editorial integration note.* With this appendix added, all previous appendices shift by one letter: what was **Appendix A** is now **Appendix B**, **B → C**, … through the end of the book. Cross‑references in the manuscript should be updated accordingly in the next editing pass.
 
@@ -1455,7 +1455,7 @@ capstone/
 
 ## Why this appendix exists
 
-Day‑2 of the masterclass ends with a governed path from agent to tool through the MCP Gateway. Many teams then ask, “How do we make this work on our document pile — PDFs, Office files, scanned images — without drowning in extraction noise?” This appendix answers that question. You will parse messy documents with **Docling**, embed them with **IBM watsonx.ai**, index them in **ChromaDB**, and expose three simple MCP tools behind the **Gateway**. A tiny chat client and an optional CrewAI agent will talk only to the Gateway, keeping security, RBAC, and observability in one place.
+Day‑2 of the masterclass ends with a governed path from agent to tool through the MCP Context Forge. Many teams then ask, “How do we make this work on our document pile — PDFs, Office files, scanned images — without drowning in extraction noise?” This appendix answers that question. You will parse messy documents with **Docling**, embed them with **IBM watsonx.ai**, index them in **ChromaDB**, and expose three simple MCP tools behind the **Gateway**. A tiny chat client and an optional CrewAI agent will talk only to the Gateway, keeping security, RBAC, and observability in one place.
 
 By the end, you will have a production‑minded pattern you can extend: Docling for high‑quality parsing, watsonx.ai for enterprise LLMs and embeddings, a vector store you control, and the Gateway as your control plane.
 
@@ -1463,7 +1463,7 @@ By the end, you will have a production‑minded pattern you can extend: Docling 
 
 ## Prerequisites
 
-You should have the MCP Gateway running on **port 4444** with a bearer token from the main book’s quickstart. Your Python runtime should be 3.11 or newer. For cloud model access, you’ll need an IBM Cloud account with **watsonx.ai** enabled, an **API key**, a **Project ID**, and a regional **endpoint** (for example, `https://us-south.ml.cloud.ibm.com`). If you don’t have cloud access yet, this appendix includes a local embedding fallback so you can still validate the pipeline end‑to‑end.
+You should have the MCP Context Forge running on **port 4444** with a bearer token from the main book’s quickstart. Your Python runtime should be 3.11 or newer. For cloud model access, you’ll need an IBM Cloud account with **watsonx.ai** enabled, an **API key**, a **Project ID**, and a regional **endpoint** (for example, `https://us-south.ml.cloud.ibm.com`). If you don’t have cloud access yet, this appendix includes a local embedding fallback so you can still validate the pipeline end‑to‑end.
 
 ---
 
@@ -2149,4 +2149,4 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 With gratitude to the **IBM** community and teams who make this work possible. Special thanks to **Mihai Criveti** for core architectural contributions, **Ruchir Puri** for the constant push to innovate, and **Peter Staar** for leadership around Docling. Appreciation to the **IBM Client Innovation Center**—in particular **Gaetano Scioscia**—for guidance on pragmatic innovation and steadfast support of our clients.
 
-*Prepared for the **MCP Gateway Masterclass** community. Adapt, extend, and remix under your repository’s license.*å€
+*Prepared for the **MCP Context Forge Masterclass** community. Adapt, extend, and remix under your repository’s license.*å€

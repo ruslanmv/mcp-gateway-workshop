@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mcpws"
 version = "0.1.0"
-description = "MCP Gateway Workshop utilities (adapter, agent, CLI)"
+description = "MCP Context Forge Workshop utilities (adapter, agent, CLI)"
 authors = [{ name = "Ruslan Magaña" }]
 readme = "README.md"
 requires-python = ">=3.11"

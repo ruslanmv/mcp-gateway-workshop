@@ -63,7 +63,7 @@ def _extract_chat_text(resp_json: Dict[str, Any]) -> str:
 
 def main() -> int:
     url = _flow_url()
-    text = sys.argv[1] if len(sys.argv) > 1 else "MCP Gateway centralizes governance."
+    text = sys.argv[1] if len(sys.argv) > 1 else "MCP Context Forge centralizes governance."
     timeout = float(os.getenv("TIMEOUT", "60"))
 
     payload = {"input_value": text, "input_type": "chat", "output_type": "chat"}

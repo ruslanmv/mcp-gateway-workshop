@@ -1,4 +1,4 @@
-# Appendix A — Building a Multimodal RAG Chatbot with Docling + IBM watsonx.ai via the MCP Gateway
+# Appendix A — Building a Multimodal RAG Chatbot with Docling + IBM watsonx.ai via the MCP Context Forge
 
 > Optional deep‑dive. Ingest PDFs/images with **Docling**, embed with **IBM watsonx.ai**, index in **ChromaDB**, and expose as an **MCP server** behind your **Gateway**. The client talks only to the Gateway.
 

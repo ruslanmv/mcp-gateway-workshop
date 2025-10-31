@@ -1,7 +1,6 @@
 site_name: MCP Context Forge Masterclass
 site_url: https://ruslanmv.github.io/mcp-gateway-workshop
 site_author: Ruslan Magaña
-site_description: Build governed, production-grade agentic AI with an MCP Context Forge. Hands-on labs + capstone with CrewAI and Langflow.
 repo_name: mcp-gateway-workshop
 repo_url: https://github.com/ruslanmv/mcp-gateway-workshop
 edit_uri: edit/main/docs
@@ -27,32 +26,10 @@ theme:
   name: material
   custom_dir: docs/.overrides
   features:
-    # Navigation & orientation
     - navigation.sections
-    - navigation.path        # breadcrumbs
-    - navigation.top         # back-to-top FAB
-    - navigation.footer      # ← Previous | Next →
-    - navigation.tracking    # sync sidebar with scroll
-    # Content polish
+    - navigation.top
     - content.code.copy
     - content.code.annotate
-    - content.tabs.link
-    - header.autohide        # sleek scrolling experience
-  palette:
-    - scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-  icon:
-    repo: fontawesome/brands/github
 
 extra:
   hero_wallpaper: assets/images/mcp-wallpaper.jpg
@@ -62,13 +39,12 @@ extra:
 
 extra_css:
   - assets/css/wx-hero.css
-
 extra_javascript:
   - assets/js/wx-hero.js
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
 plugins:
-  - search    # keep defaults for max compatibility in strict mode
+  - search
   - social
 
 markdown_extensions:

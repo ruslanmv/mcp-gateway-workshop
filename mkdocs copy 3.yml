@@ -1,7 +1,6 @@
 site_name: MCP Context Forge Masterclass
 site_url: https://ruslanmv.github.io/mcp-gateway-workshop
 site_author: Ruslan Magaña
-site_description: Build governed, production-grade agentic AI with an MCP Context Forge. Hands-on labs + capstone with CrewAI and Langflow.
 repo_name: mcp-gateway-workshop
 repo_url: https://github.com/ruslanmv/mcp-gateway-workshop
 edit_uri: edit/main/docs
@@ -27,17 +26,20 @@ theme:
   name: material
   custom_dir: docs/.overrides
   features:
-    # Navigation & orientation
+    # Navigation
     - navigation.sections
-    - navigation.path        # breadcrumbs
-    - navigation.top         # back-to-top FAB
-    - navigation.footer      # ← Previous | Next →
-    - navigation.tracking    # sync sidebar with scroll
-    # Content polish
-    - content.code.copy
-    - content.code.annotate
-    - content.tabs.link
-    - header.autohide        # sleek scrolling experience
+    - navigation.path          # breadcrumbs under the title
+    - navigation.top           # floating "back to top" button
+    - navigation.footer        # ← Previous | Next → buttons
+    # Content actions / polish
+    - content.action.edit      # "Edit this page" button (uses edit_uri)
+    - content.action.view      # "View source" button (uses repo_url)
+    - content.code.copy        # copy button on code blocks
+    - content.code.annotate    # beautiful callouts on code
+    - content.tabs.link        # keep tab selection across pages
+    # UX nice-to-haves
+    - header.autohide          # hide header on scroll
+  # (Optional) palette for light/dark toggle; keep if you want a theme switch
   palette:
     - scheme: default
       primary: indigo
@@ -51,8 +53,6 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-  icon:
-    repo: fontawesome/brands/github
 
 extra:
   hero_wallpaper: assets/images/mcp-wallpaper.jpg
@@ -68,7 +68,10 @@ extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
 plugins:
-  - search    # keep defaults for max compatibility in strict mode
+  - search:
+      lang: en
+      separator: '[\s\-]+'
+      prebuild_index: true
   - social
 
 markdown_extensions:
@@ -101,3 +104,4 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  - pymdownx.details         # collapsible sections
